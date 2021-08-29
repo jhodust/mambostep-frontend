@@ -1,0 +1,94 @@
+<div class="card card-succes col-md-12">
+  <div class="card-header">
+    <h4>Consulta Alumno</h4>
+    <form class="card-header-form">
+      <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Ingrese número de Documento" [(ngModel)]="documentoSearch"  required>
+        <div class="input-group-btn">
+          <button class="btn btn-primary btn-icon" (click)="searchAlumno()"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-danger  alert-dismissible show fade" *ngIf="msgsErrorStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsError}}
+                      </div>
+                    </div>
+  <div *ngIf="datosBasicosAlumno">
+  <div class="section-title">Datos Personales</div>
+  <div class="row">
+  <div class="form-group col-md-4">
+      <label>Nombre</label>
+      <input type="text" class="form-control" value="{{datosBasicosAlumno.nombre}}" disabled >
+    </div>
+    <div class="form-group col-md-4">
+      <label>Identificación</label>
+      <input type="text" class="form-control" value="{{datosBasicosAlumno.identificacion}}" disabled>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Fecha Nacimiento</label>
+      <input type="text" class="form-control datepicker" value="{{datosBasicosAlumno.fechaNacimiento | date: 'dd/MM/yyyy'}}" disabled>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group col-md-4">
+      <label>Fecha Ingreso</label>
+      <input type="text" class="form-control datepicker" value="{{datosBasicosAlumno.fechaIngreso | date: 'dd/MM/yyyy'}}" disabled>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Instagram</label>
+      <input type="text" class="form-control" value="{{datosBasicosAlumno.instagram}}" disabled>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Telefono</label>
+      <input type="text" class="form-control" value="{{datosBasicosAlumno.telefono}}" disabled>
+    </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label>Nombre Acudiente</label>
+        <input type="text" class="form-control" value="{{datosBasicosAlumno.nombreAcudiente}}" disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label>Telefono Acudiente</label>
+        <input type="text" class="form-control" value="{{datosBasicosAlumno.telefonoAcudiente}}" disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label>Parentesco Acudiente</label>
+        <input type="text" class="form-control" value="{{datosBasicosAlumno.parentescoAcudiente}}" disabled>
+      </div>
+    </div>
+    </div>
+    <div *ngIf="dataAlumno?.length > 0">
+  <div class="section-title">Histórico Pagos</div>
+  <table datatable  [dtTrigger]="dtTrigger" class="row-border hover" *ngIf="dataAlumno?.length > 0">
+    <thead>
+      <tr>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Paquete</th>
+        <th>Precio Pactado</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of dataAlumno">
+        <td>{{ data.fechaInicio | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ data.fechaFin | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ data.nombrePaquete }}</td>
+        <td>{{ data.precioPactado }}</td>
+        <td>{{ data.observaciones }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+  </div>
+</div>
+
