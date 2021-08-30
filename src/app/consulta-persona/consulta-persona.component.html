@@ -20,6 +20,12 @@
                       </div>
                     </div>
   <div *ngIf="datosBasicosAlumno">
+  <div class="alert alert-success" *ngIf="horarioClase?.length > 0">
+                      Su mensualidad se encuentra activa
+                    </div>
+      <div class="alert alert-danger" *ngIf="horarioClase?.length == 0">
+                      Su mensualidad se encuentra vencida
+                    </div>
   <div class="section-title">Datos Personales</div>
   <div class="row">
   <div class="form-group col-md-4">
@@ -64,9 +70,34 @@
       </div>
     </div>
     </div>
-    <div *ngIf="dataAlumno?.length > 0">
+    <div *ngIf="datosBasicosAlumno && horarioClase?.length > 0">
+    <div class="section-title">Horario Clase</div>
+    <div class="table-responsive">
+
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Clase</th>
+            <th scope="col">Dia</th>
+            <th scope="col">Hora Inicio</th>
+            <th scope="col">Hora Fin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let clase of horarioClase">
+            <th scope="row">{{clase.clase}}</th>
+            <td>{{clase.dia}}</td>
+            <td>{{clase.horaInicio}}</td>
+            <td>{{clase.horaFin}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div [hidden]="dataAlumno?.length == 0">
   <div class="section-title">Histórico Pagos</div>
-  <table datatable  [dtTrigger]="dtTrigger" class="row-border hover" *ngIf="dataAlumno?.length > 0">
+  <table datatable  [dtTrigger]="dtTrigger" class="row-border hover" >
     <thead>
       <tr>
         <th>Fecha Inicio</th>

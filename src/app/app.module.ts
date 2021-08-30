@@ -14,6 +14,7 @@ import { DataTablesModule } from "angular-datatables";
 import { PaqueteComponent } from './paquete/paquete.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClasesComponent } from './clases/clases.component';
+import { HorarioClaseComponent } from './horario-clase/horario-clase.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ClasesComponent } from './clases/clases.component';
     MensualidadComponent,
     PaqueteComponent,
     ClasesComponent,
+    HorarioClaseComponent,
   ],
   imports: [
     BrowserModule,

@@ -125,15 +125,15 @@ export class PersonasComponent implements OnInit {
 
   guardarAlumno(){
     let dto={
-      nombre: this.datosPersonalesForm.get('nombre')?.value,
-      identificacion: this.datosPersonalesForm.get('identificacion')?.value,
-      fechaNacimiento: this.datosPersonalesForm.get('fechaNacimiento')?.value,
-      fechaIngreso: this.datosPersonalesForm.get('fechaIngreso')?.value,
-      instagram: this.datosPersonalesForm.get('instagram')?.value,
-      telefono: this.datosPersonalesForm.get('telefono')?.value,
-      nombreAcudiente: this.datosPersonalesForm.get('nombreAcudiente')?.value,
-      telefonoAcudiente: this.datosPersonalesForm.get('telefonoAcudiente')?.value,
-      parentescoAcudiente: this.datosPersonalesForm.get('parentescoAcudiente')?.value,
+      nombre: this.datosPersonalesForm.get('nombre').value,
+      identificacion: this.datosPersonalesForm.get('identificacion').value,
+      fechaNacimiento: this.datosPersonalesForm.get('fechaNacimiento').value,
+      fechaIngreso: this.datosPersonalesForm.get('fechaIngreso').value,
+      instagram: this.datosPersonalesForm.get('instagram').value,
+      telefono: this.datosPersonalesForm.get('telefono').value,
+      nombreAcudiente: this.datosPersonalesForm.get('nombreAcudiente').value,
+      telefonoAcudiente: this.datosPersonalesForm.get('telefonoAcudiente').value,
+      parentescoAcudiente: this.datosPersonalesForm.get('parentescoAcudiente').value,
       idSede: 1,
     }
 
