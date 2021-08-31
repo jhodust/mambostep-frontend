@@ -35,7 +35,7 @@ import { HorarioClaseComponent } from './horario-clase/horario-clase.component';
     ReactiveFormsModule,
     HttpClientModule,
     DataTablesModule,
-    BrowserAnimationsModule, // required animations module
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

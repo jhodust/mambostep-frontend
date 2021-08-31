@@ -38,6 +38,7 @@ export class PersonasComponent implements OnInit {
     parentescoAcudiente: ['', Validators.required],
     idSede: ['', Validators.required],
   });
+
   primeraMensualidadForm = this._formBuilder.group({
     fechaInicio: ['', Validators.required],
     fechaFin: ['', Validators.required],
@@ -86,8 +87,9 @@ export class PersonasComponent implements OnInit {
 
   validarMenorEdad(){
     let fechaNac=this.datosPersonalesForm.get('fechaNacimiento')?.value;
-    let fechaActual: any=new Date();
-    return (Math.floor(((fechaActual-fechaNac) / (1000 * 3600 * 24)) / 365))<18;
+    let fechaNacimiento = new Date(fechaNac);
+    let diferencia = Math.abs(Date.now() - fechaNacimiento.getTime());
+    return (Math.floor((diferencia / (1000 * 3600 * 24))/365))<18;
   }
 
 
@@ -136,7 +138,7 @@ export class PersonasComponent implements OnInit {
       parentescoAcudiente: this.datosPersonalesForm.get('parentescoAcudiente').value,
       idSede: 1,
     }
-
+    console.log(dto);
     this._personaService.savePersona(dto).subscribe(response => {
       console.log("guardando persona")
       console.log(response);

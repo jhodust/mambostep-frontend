@@ -63,11 +63,11 @@
     </div>
     <div class="form-group">
       <label>Fecha Nacimiento</label>
-      <input type="text" class="form-control datepicker" formControlName="fechaNacimiento">
+      <input type="date" class="form-control" formControlName="fechaNacimiento">
     </div>
     <div class="form-group">
       <label>Fecha Ingreso</label>
-      <input type="text" class="form-control datepicker" formControlName="fechaIngreso">
+      <input type="date" class="form-control" formControlName="fechaIngreso">
     </div>
     <div class="form-group">
       <label>Instagram</label>
@@ -77,7 +77,7 @@
       <label>Telefono</label>
       <input type="text" class="form-control" formControlName="telefono">
     </div>
-    <div class="row" *ngIf="validarMenorEdad()">
+    <div  *ngIf="validarMenorEdad()">
       <div class="form-group">
         <label>Nombre Acudiente</label>
         <input type="text" class="form-control" formControlName="nombreAcudiente">
@@ -103,11 +103,11 @@
     </div>
     <div class="form-group">
       <label>Fecha Inicio</label>
-      <input type="text" class="form-control datepicker" formControlName="fechaInicio">
+      <input type="date" class="form-control" formControlName="fechaInicio">
     </div>
     <div class="form-group">
       <label>Fecha Fin</label>
-      <input type="text" class="form-control datepicker" formControlName="fechaFin">
+      <input type="date" class="form-control" formControlName="fechaFin">
     </div>
     <div class="form-group">
       <label>Valor a Pagar</label>

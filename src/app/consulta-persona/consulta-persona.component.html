@@ -27,48 +27,55 @@
                       Su mensualidad se encuentra vencida
                     </div>
   <div class="section-title">Datos Personales</div>
+  <form [formGroup]="datosPersonalesForm">
   <div class="row">
   <div class="form-group col-md-4">
       <label>Nombre</label>
-      <input type="text" class="form-control" value="{{datosBasicosAlumno.nombre}}" disabled >
+      <input type="text" class="form-control" formControlName="nombre">
     </div>
     <div class="form-group col-md-4">
       <label>Identificación</label>
-      <input type="text" class="form-control" value="{{datosBasicosAlumno.identificacion}}" disabled>
+      <input type="text" class="form-control"  formControlName="identificacion">
     </div>
     <div class="form-group col-md-4">
       <label>Fecha Nacimiento</label>
-      <input type="text" class="form-control datepicker" value="{{datosBasicosAlumno.fechaNacimiento | date: 'dd/MM/yyyy'}}" disabled>
+      <input type="date" class="form-control"  formControlName="fechaNacimiento">
     </div>
     </div>
     <div class="row">
     <div class="form-group col-md-4">
       <label>Fecha Ingreso</label>
-      <input type="text" class="form-control datepicker" value="{{datosBasicosAlumno.fechaIngreso | date: 'dd/MM/yyyy'}}" disabled>
+      <input type="date" class="form-control"  formControlName="fechaIngreso">
     </div>
     <div class="form-group col-md-4">
       <label>Instagram</label>
-      <input type="text" class="form-control" value="{{datosBasicosAlumno.instagram}}" disabled>
+      <input type="text" class="form-control" formControlName="instagram">
     </div>
     <div class="form-group col-md-4">
       <label>Telefono</label>
-      <input type="text" class="form-control" value="{{datosBasicosAlumno.telefono}}" disabled>
+      <input type="text" class="form-control"  formControlName="telefono">
     </div>
     </div>
     <div class="row">
       <div class="form-group col-md-4">
         <label>Nombre Acudiente</label>
-        <input type="text" class="form-control" value="{{datosBasicosAlumno.nombreAcudiente}}" disabled>
+        <input type="text" class="form-control" formControlName="nombreAcudiente">
       </div>
       <div class="form-group col-md-4">
         <label>Telefono Acudiente</label>
-        <input type="text" class="form-control" value="{{datosBasicosAlumno.telefonoAcudiente}}" disabled>
+        <input type="text" class="form-control" formControlName="telefonoAcudiente">
       </div>
       <div class="form-group col-md-4">
         <label>Parentesco Acudiente</label>
-        <input type="text" class="form-control" value="{{datosBasicosAlumno.parentescoAcudiente}}" disabled>
+        <input type="text" class="form-control" formControlName="parentescoAcudiente">
       </div>
     </div>
+    <div class="card-footer text-right">
+    <button class="btn btn-primary" (click)="editDatosPersonales()" [hidden]="!readOnlyFields">Editar</button>
+    <button class="btn btn-primary mr-4" (click)="cancelEditDatosPersonales()" [hidden]="readOnlyFields">Cancelar</button>
+    <button class="btn btn-primary" (click)="updateDatosPersonales()" [hidden]="readOnlyFields">Guardar</button>
+  </div>
+  </form>
     </div>
     <div *ngIf="datosBasicosAlumno && horarioClase?.length > 0">
     <div class="section-title">Horario Clase</div>
