@@ -25,7 +25,8 @@ export class PersonasComponent implements OnInit {
     private _claseService: ClaseService) { }
 
 
-
+  showMessageError: boolean = false;
+  messageError: string = "Este campo es obligatorio";
   datosPersonalesForm = this._formBuilder.group({
     nombre: ['', Validators.required],
     identificacion: ['', Validators.required],
@@ -33,21 +34,17 @@ export class PersonasComponent implements OnInit {
     fechaIngreso: ['', Validators.required],
     instagram: ['', Validators.required],
     telefono: ['', Validators.required],
-    nombreAcudiente: ['', Validators.required],
-    telefonoAcudiente: ['', Validators.required],
-    parentescoAcudiente: ['', Validators.required],
-    idSede: ['', Validators.required],
+    nombreAcudiente: [''],
+    telefonoAcudiente: [''],
+    parentescoAcudiente: ['']
   });
 
   primeraMensualidadForm = this._formBuilder.group({
     fechaInicio: ['', Validators.required],
     fechaFin: ['', Validators.required],
     idPaquete: ['', Validators.required],
-    precioPaquete: ['', Validators.required],
     precioPactado: ['', Validators.required],
-    observaciones: ['', Validators.required],
-    idPersona: ['', Validators.required],
-    clases: ['', Validators.required]
+    observaciones: ['']
   });
   paquetes: Paquete[] = [];
   paqueteSelected: Paquete=new Paquete();
@@ -62,12 +59,16 @@ export class PersonasComponent implements OnInit {
   msgsSuccess:string;
   msgsErrorStatus:boolean=false;
   msgsError:string;
+
   ngOnInit(): void {
     this.listPersonas=[];
   this.listarPersonas();
   this.listarPaquetes();
   this.listarClases();
   }
+
+  get formDatos() { return this.datosPersonalesForm.controls; }
+  get formMensualidad() { return this.primeraMensualidadForm.controls; }
 
   listarPaquetes(){
     this.paquetes=[];
@@ -89,7 +90,23 @@ export class PersonasComponent implements OnInit {
     let fechaNac=this.datosPersonalesForm.get('fechaNacimiento')?.value;
     let fechaNacimiento = new Date(fechaNac);
     let diferencia = Math.abs(Date.now() - fechaNacimiento.getTime());
-    return (Math.floor((diferencia / (1000 * 3600 * 24))/365))<18;
+    if((Math.floor((diferencia / (1000 * 3600 * 24))/365))<18){
+      this.formDatos.nombreAcudiente.setValidators([Validators.required]);
+      this.formDatos.nombreAcudiente.updateValueAndValidity();
+      this.formDatos.telefonoAcudiente.setValidators([Validators.required]);
+      this.formDatos.telefonoAcudiente.updateValueAndValidity();
+      this.formDatos.parentescoAcudiente.setValidators([Validators.required]);
+      this.formDatos.parentescoAcudiente.updateValueAndValidity();
+      return true;
+    }else{
+      this.formDatos.nombreAcudiente.setValidators([]);
+      this.formDatos.nombreAcudiente.updateValueAndValidity();
+      this.formDatos.telefonoAcudiente.setValidators([]);
+      this.formDatos.telefonoAcudiente.updateValueAndValidity();
+      this.formDatos.parentescoAcudiente.setValidators([]);
+      this.formDatos.parentescoAcudiente.updateValueAndValidity();
+      return false;
+    }
   }
 
 
@@ -126,6 +143,13 @@ export class PersonasComponent implements OnInit {
   }
 
   guardarAlumno(){
+    this.showMessageError = true;
+    if (this.datosPersonalesForm.invalid || this.primeraMensualidadForm.invalid) {
+      console.log(this.datosPersonalesForm);
+      console.log(this.primeraMensualidadForm);
+      console.log("campos invalidos");
+      return;
+    }
     let dto={
       nombre: this.datosPersonalesForm.get('nombre').value,
       identificacion: this.datosPersonalesForm.get('identificacion').value,

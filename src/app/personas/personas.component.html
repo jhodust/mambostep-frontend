@@ -56,39 +56,66 @@
     <div class="form-group">
       <label>Nombre</label>
       <input type="text" class="form-control" formControlName="nombre">
+      <div class="invalid-feedback2" *ngIf="formDatos.nombre.invalid && (formDatos.nombre.dirty || formDatos.nombre.touched || showMessageError)">
+        <div *ngIf="formDatos.nombre.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Identificación</label>
-      <input type="text" class="form-control" formControlName="identificacion">
+      <input type="number" class="form-control" formControlName="identificacion">
+      <div class="invalid-feedback2" *ngIf="formDatos.identificacion.invalid && (formDatos.identificacion.dirty || formDatos.identificacion.touched || showMessageError)">
+        <div *ngIf="formDatos.identificacion.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Fecha Nacimiento</label>
       <input type="date" class="form-control" formControlName="fechaNacimiento">
+      <div class="invalid-feedback2" *ngIf="formDatos.fechaNacimiento.invalid && (formDatos.fechaNacimiento.dirty || formDatos.fechaNacimiento.touched || showMessageError)">
+        <div *ngIf="formDatos.fechaNacimiento.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Fecha Ingreso</label>
       <input type="date" class="form-control" formControlName="fechaIngreso">
+      <div class="invalid-feedback2" *ngIf="formDatos.fechaIngreso.invalid && (formDatos.fechaIngreso.dirty || formDatos.fechaIngreso.touched || showMessageError)">
+        <div *ngIf="formDatos.fechaIngreso.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Instagram</label>
       <input type="text" class="form-control" formControlName="instagram">
+      <div class="invalid-feedback2" *ngIf="formDatos.instagram.invalid && (formDatos.instagram.dirty || formDatos.instagram.touched || showMessageError)">
+        <div *ngIf="formDatos.instagram.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Telefono</label>
-      <input type="text" class="form-control" formControlName="telefono">
+      <input type="number" class="form-control" formControlName="telefono">
+      <div class="invalid-feedback2" *ngIf="formDatos.telefono.invalid && (formDatos.telefono.dirty || formDatos.telefono.touched || showMessageError)">
+        <div *ngIf="formDatos.telefono.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div  *ngIf="validarMenorEdad()">
       <div class="form-group">
         <label>Nombre Acudiente</label>
         <input type="text" class="form-control" formControlName="nombreAcudiente">
+        <div class="invalid-feedback2" *ngIf="formDatos.nombreAcudiente.invalid && (formDatos.nombreAcudiente.dirty || formDatos.nombreAcudiente.touched || showMessageError)">
+        <div *ngIf="formDatos.nombreAcudiente.errors.required">{{messageError}}</div>
+      </div>
       </div>
       <div class="form-group">
         <label>Telefono Acudiente</label>
-        <input type="text" class="form-control" formControlName="telefonoAcudiente">
+        <input type="number" class="form-control" formControlName="telefonoAcudiente">
+        <div class="invalid-feedback2" *ngIf="formDatos.telefonoAcudiente.invalid && (formDatos.telefonoAcudiente.dirty || formDatos.telefonoAcudiente.touched || showMessageError)">
+        <div *ngIf="formDatos.telefonoAcudiente.errors.required">{{messageError}}</div>
+      </div>
       </div>
       <div class="form-group">
         <label>Parentesco Acudiente</label>
         <input type="text" class="form-control" formControlName="parentescoAcudiente">
+        <div class="invalid-feedback2" *ngIf="formDatos.parentescoAcudiente.invalid && (formDatos.parentescoAcudiente.dirty || formDatos.parentescoAcudiente.touched || showMessageError)">
+        <div *ngIf="formDatos.parentescoAcudiente.errors.required">{{messageError}}</div>
+      </div>
       </div>
     </div>
     </form>
@@ -99,23 +126,37 @@
       <select class="form-control select2" formControlName="idPaquete" (change)="loadPaquetePrecio()">
         <option *ngFor="let paq of paquetes" [value]="paq.id">{{paq.nombre}}</option>
       </select>
-
+      <div class="invalid-feedback" *ngIf="formMensualidad.idPaquete.invalid && (formMensualidad.idPaquete.dirty || formMensualidad.idPaquete.touched || showMessageError)">
+        <div *ngIf="formMensualidad.idPaquete.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Fecha Inicio</label>
       <input type="date" class="form-control" formControlName="fechaInicio">
+      <div class="invalid-feedback2" *ngIf="formMensualidad.fechaInicio.invalid && (formMensualidad.fechaInicio.dirty || formMensualidad.fechaInicio.touched || showMessageError)">
+        <div *ngIf="formMensualidad.fechaInicio.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Fecha Fin</label>
       <input type="date" class="form-control" formControlName="fechaFin">
+      <div class="invalid-feedback2" *ngIf="formMensualidad.fechaFin.invalid && (formMensualidad.fechaFin.dirty || formMensualidad.fechaFin.touched || showMessageError)">
+        <div *ngIf="formMensualidad.fechaFin.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Valor a Pagar</label>
-      <input type="text" class="form-control" formControlName="precioPactado">
+      <input type="number" class="form-control" formControlName="precioPactado">
+      <div class="invalid-feedback2" *ngIf="formMensualidad.precioPactado.invalid && (formMensualidad.precioPactado.dirty || formMensualidad.precioPactado.touched || showMessageError)">
+        <div *ngIf="formMensualidad.precioPactado.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label>Observaciones</label>
       <input type="text" class="form-control" formControlName="observaciones">
+      <div class="invalid-feedback2" *ngIf="formMensualidad.precioPactado.invalid && (formMensualidad.precioPactado.dirty || formMensualidad.precioPactado.touched || showMessageError)">
+        <div *ngIf="formMensualidad.precioPactado.errors.required">{{messageError}}</div>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label">Clases</label>
@@ -125,6 +166,7 @@
           <span class="selectgroup-button">{{ clase.nombre }}</span>
         </label>
       </div>
+
     </div>
     </form>
   </div>

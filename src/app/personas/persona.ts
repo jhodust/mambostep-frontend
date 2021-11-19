@@ -11,5 +11,9 @@ export class Persona {
    parentescoAcudiente: String | undefined;
    idSede: number | undefined;
    nombreSede: String | undefined;
+   username: string;
+   password: string;
+   enabled: boolean;
+   roles:any[]=[];
 
 }

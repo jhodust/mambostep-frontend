@@ -103,7 +103,7 @@ export class ConsultaPersonaComponent implements OnInit {
     this._mensualidadService.searchLastMensualidad(this.documentoSearch).subscribe((response) =>{
       this.initializedDataTable();
       this.dataAlumno = (response as any);
-
+      console.log(this.dataAlumno);
 
     });
 

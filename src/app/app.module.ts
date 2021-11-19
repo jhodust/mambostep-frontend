@@ -1,3 +1,5 @@
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 import { PersonasComponent } from './personas/personas.component';
 import { MensualidadComponent } from './mensualidad/mensualidad.component';
 import { ConsultaPersonaComponent } from './consulta-persona/consulta-persona.component';
@@ -9,12 +11,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DataTablesModule } from "angular-datatables";
 import { PaqueteComponent } from './paquete/paquete.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClasesComponent } from './clases/clases.component';
 import { HorarioClaseComponent } from './horario-clase/horario-clase.component';
+import { LoginComponent } from './login/login.component';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +31,8 @@ import { HorarioClaseComponent } from './horario-clase/horario-clase.component';
     PaqueteComponent,
     ClasesComponent,
     HorarioClaseComponent,
+    LoginComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,7 +43,8 @@ import { HorarioClaseComponent } from './horario-clase/horario-clase.component';
     DataTablesModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+              { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
