@@ -4,8 +4,11 @@ export class Paquete {
 
   id:number;
   nombre: string;
-  cantidadClasesSemana: string;
+  cantidadClasesEstandarSemana: string;
   precio: string;
+  hasClasesCrewLatina: boolean;
+  hasClasesCrewUrbana: boolean;
+  ventaPublico: boolean;
   status:boolean;
 
 }

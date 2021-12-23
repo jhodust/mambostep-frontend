@@ -33,6 +33,8 @@ import { MainComponent } from './main/main.component';
     HorarioClaseComponent,
     LoginComponent,
     MainComponent,
+    PaqueteComponent,
+    ClasesComponent
   ],
   imports: [
     BrowserModule,

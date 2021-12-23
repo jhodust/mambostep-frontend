@@ -36,7 +36,9 @@ export class PersonasComponent implements OnInit {
     telefono: ['', Validators.required],
     nombreAcudiente: [''],
     telefonoAcudiente: [''],
-    parentescoAcudiente: ['']
+    parentescoAcudiente: [''],
+    profesor: [false],
+    alumno: [false]
   });
 
   primeraMensualidadForm = this._formBuilder.group({
@@ -46,6 +48,13 @@ export class PersonasComponent implements OnInit {
     precioPactado: ['', Validators.required],
     observaciones: ['']
   });
+
+  profesorForm = this._formBuilder.group({
+    valorClase: ['', Validators.required],
+    valorMensualidad: ['', Validators.required]
+  });
+
+
   paquetes: Paquete[] = [];
   paqueteSelected: Paquete=new Paquete();
   listClases: Clase[];
@@ -59,16 +68,21 @@ export class PersonasComponent implements OnInit {
   msgsSuccess:string;
   msgsErrorStatus:boolean=false;
   msgsError:string;
+  hiddenFormPagoMensualidad:boolean;
+  hiddenFormProfesor:boolean;
 
   ngOnInit(): void {
     this.listPersonas=[];
   this.listarPersonas();
   this.listarPaquetes();
   this.listarClases();
+  this.hiddenFormPagoMensualidad=true;
+  this.hiddenFormProfesor=true;
   }
 
   get formDatos() { return this.datosPersonalesForm.controls; }
   get formMensualidad() { return this.primeraMensualidadForm.controls; }
+  get formProfesor() { return this.profesorForm.controls; }
 
   listarPaquetes(){
     this.paquetes=[];
@@ -142,11 +156,14 @@ export class PersonasComponent implements OnInit {
     this.listarPersonas();
   }
 
-  guardarAlumno(){
+  guardarPersona(){
     this.showMessageError = true;
-    if (this.datosPersonalesForm.invalid || this.primeraMensualidadForm.invalid) {
+    if (this.datosPersonalesForm.invalid ||
+      (this.datosPersonalesForm.get('profesor').value && this.profesorForm.invalid) ||
+      (this.datosPersonalesForm.get('alumno').value  && this.primeraMensualidadForm.invalid)) {
       console.log(this.datosPersonalesForm);
       console.log(this.primeraMensualidadForm);
+      console.log(this.profesorForm);
       console.log("campos invalidos");
       return;
     }
@@ -161,12 +178,20 @@ export class PersonasComponent implements OnInit {
       telefonoAcudiente: this.datosPersonalesForm.get('telefonoAcudiente').value,
       parentescoAcudiente: this.datosPersonalesForm.get('parentescoAcudiente').value,
       idSede: 1,
+      profesor: this.datosPersonalesForm.get('profesor').value,
+      alumno: this.datosPersonalesForm.get('alumno').value,
     }
     console.log(dto);
     this._personaService.savePersona(dto).subscribe(response => {
       console.log("guardando persona")
       console.log(response);
-      this.guardarMensualidad(response.id);
+      if(response.alumno){
+        this.guardarAlumno(response.id);
+        this.guardarMensualidad(response.id);
+      }else if( response.profesor){
+        this.guardarProfesor(response.id);
+      }
+
     });
   }
 
@@ -185,8 +210,31 @@ export class PersonasComponent implements OnInit {
       console.log("guardando mensualidad");
       console.log(response);
       this.msgsSuccessStatus=true;
-      this.msgsSuccess="Registro exitoso alumno";
+      this.msgsSuccess="Registro exitoso persona";
       this.cancelForm();
+    })
+  }
+  guardarProfesor(idPersona:number){
+    let dto={
+      valorClase: this.profesorForm.get('valorClase')?.value,
+      pagoClasesMes: this.profesorForm.get('valorMensualidad')?.value,
+      idPersona: idPersona,
+    }
+
+    this._personaService.saveProfesor(dto).subscribe(response => {
+      this.msgsSuccessStatus=true;
+      this.msgsSuccess="Registro exitoso persona";
+      this.cancelForm();
+    })
+  }
+
+  guardarAlumno(idPersona:number){
+    let dto={
+      idPersona: idPersona,
+    }
+
+    this._personaService.saveAlumno(dto).subscribe(response => {
+
     })
   }
 
@@ -205,5 +253,17 @@ export class PersonasComponent implements OnInit {
       }
     });
     return paqueteElegido;
+  }
+
+  changeTipoPersonaAlumno(){
+    this.datosPersonalesForm.get('profesor').setValue(!this.datosPersonalesForm.get('alumno').value);
+    this.hiddenFormPagoMensualidad=!this.datosPersonalesForm.get('alumno').value;
+    this.hiddenFormProfesor=!this.datosPersonalesForm.get('profesor').value;
+  }
+
+  changeTipoPersonaProfesor(){
+    this.datosPersonalesForm.get('alumno').setValue(!this.datosPersonalesForm.get('profesor').value);
+    this.hiddenFormPagoMensualidad=!this.datosPersonalesForm.get('alumno').value;
+    this.hiddenFormProfesor=!this.datosPersonalesForm.get('profesor').value;
   }
 }

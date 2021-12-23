@@ -15,5 +15,7 @@ export class Persona {
    password: string;
    enabled: boolean;
    roles:any[]=[];
-
+   profesor: boolean;
+   alumno: boolean;
+   tipoPersona: string;
 }

@@ -1,1 +1,150 @@
-<p>paquete works!</p>
+<div class="card card-success col-md-12" [hidden]="viewForm">
+  <div class="card-header">
+    <h4>PAQUETES REGISTRADOS</h4>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-success  alert-dismissible show fade" *ngIf="msgsSuccessStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsSuccess}}
+                      </div>
+                    </div>
+
+  <button class="btn btn-primary mb-4" (click)="createPaquete()">Nuevo Registro</button>
+
+  <table datatable [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Horas por semana</th>
+        <th>Clases en crew latino?</th>
+        <th>Clases en crew urbano?</th>
+        <th>Venta Público</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let paquete of paquetes">
+          <td>{{ paquete.nombre }}</td>
+          <td>{{ paquete.precio }}</td>
+          <td>{{ paquete.cantidadClasesEstandarSemana }}</td>
+          <td>
+            <label class="custom-switch mt-2">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" [checked]="paquete.hasClasesCrewLatina" disabled>
+              <span class="custom-switch-indicator"></span>
+            </label>
+          </td>
+          <td>
+            <label class="custom-switch mt-2">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" [checked]="paquete.hasClasesCrewUrbano" disabled>
+              <span class="custom-switch-indicator"></span>
+            </label>
+          </td>
+          <td>
+            <label class="custom-switch mt-2">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" [checked]="paquete.ventaPublico" disabled>
+              <span class="custom-switch-indicator"></span>
+            </label>
+          </td>
+          <td>
+            <label class="custom-switch mt-2">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" [checked]="paquete.status" disabled>
+              <span class="custom-switch-indicator"></span>
+            </label>
+          </td>
+          <td>
+            <div class="row">
+              <a href="#" class="btn btn-icon btn-primary"><i class="far fa-edit"></i></a>
+              <a href="#" class="btn btn-icon btn-danger ml-1"><i class="fas fa-times"></i></a>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+</div>
+
+<div class="card card-success col-md-12" [hidden]="!viewForm">
+  <div class="card-header">
+    <h4>REGISTRO PAQUETE</h4>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-danger  alert-dismissible show fade" *ngIf="msgsErrorStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsError}}
+                      </div>
+                    </div>
+  <div class="section-title">Datos Paquete</div>
+  <form [formGroup]="datosPaqueteForm">
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre">
+      <div class="invalid-feedback2" *ngIf="formDatos.nombre.invalid && (formDatos.nombre.dirty || formDatos.nombre.touched || showMessageError)">
+        <div *ngIf="formDatos.nombre.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Precio</label>
+      <input type="number" class="form-control" formControlName="precio">
+      <div class="invalid-feedback2" *ngIf="formDatos.precio.invalid && (formDatos.precio.dirty || formDatos.precio.touched || showMessageError)">
+        <div *ngIf="formDatos.precio.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Cantidad de clases estandar semanal</label>
+      <input type="number" class="form-control" formControlName="cantidadClasesEstandarPorSemana">
+      <div class="invalid-feedback2" *ngIf="formDatos.cantidadClasesEstandarPorSemana.invalid && (formDatos.cantidadClasesEstandarPorSemana.dirty || formDatos.cantidadClasesEstandarPorSemana.touched || showMessageError)">
+        <div *ngIf="formDatos.cantidadClasesEstandarPorSemana.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <label class="custom-switch mt-2">
+          <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="hasClasesCrewLatina">
+          <span class="custom-switch-indicator"></span>
+          <span class="custom-switch-description">Clases con crew latino?</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="custom-switch mt-2">
+          <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="hasClasesCrewUrbana">
+          <span class="custom-switch-indicator"></span>
+          <span class="custom-switch-description">Clases con crew urbano?</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="custom-switch mt-2">
+          <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="isVentaPublico">
+          <span class="custom-switch-indicator"></span>
+          <span class="custom-switch-description">Venta todo el público?</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="custom-switch mt-2">
+          <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="status">
+          <span class="custom-switch-indicator"></span>
+          <span class="custom-switch-description">Status</span>
+        </label>
+      </div>
+    </div>
+
+
+    </form>
+
+  <div class="card-footer text-right">
+    <button class="btn btn-primary mr-4" (click)="cancelForm()">Cancelar</button>
+    <button class="btn btn-primary" (click)="guardarPaquete()">Guardar</button>
+  </div>
+
+</div>
+
+
+

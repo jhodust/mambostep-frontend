@@ -1,6 +1,6 @@
 <div class="card card-success col-md-12" [hidden]="viewForm">
   <div class="card-header">
-    <h4>ALUMNOS REGISTRADOS</h4>
+    <h4>PERSONAS REGISTRADOS</h4>
   </div>
   <div class="card-body">
   <div class="alert alert-success  alert-dismissible show fade" *ngIf="msgsSuccessStatus">
@@ -40,7 +40,7 @@
 
 <div class="card card-success col-md-12" [hidden]="!viewForm">
   <div class="card-header">
-    <h4>REGISTRO ALUMNOS</h4>
+    <h4>REGISTRO PERSONA</h4>
   </div>
   <div class="card-body">
   <div class="alert alert-danger  alert-dismissible show fade" *ngIf="msgsErrorStatus">
@@ -118,7 +118,24 @@
       </div>
       </div>
     </div>
+    <div class="form-group">
+    <div class="control-label">Tipo de Persona</div>
+      <div class="row">
+        <label class="custom-switch mt-2">
+          <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="alumno" (change)="changeTipoPersonaAlumno()">
+          <span class="custom-switch-indicator"></span>
+          <span class="custom-switch-description">Alumno</span>
+        </label>
+        <label class="custom-switch mt-2">
+          <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="profesor" (change)="changeTipoPersonaProfesor()">
+          <span class="custom-switch-indicator"></span>
+          <span class="custom-switch-description">Docente</span>
+        </label>
+      </div>
+    </div>
+
     </form>
+    <div [hidden]="hiddenFormPagoMensualidad">
     <div class="section-title">Pago Mensualidad</div>
     <form [formGroup]="primeraMensualidadForm">
     <div class="form-group">
@@ -169,10 +186,33 @@
 
     </div>
     </form>
+    </div>
+
+    <div [hidden]="hiddenFormProfesor">
+    <div class="section-title">Datos Profesor</div>
+    <form [formGroup]="profesorForm">
+
+    <div class="form-group">
+      <label>Valor clase</label>
+      <input type="number" class="form-control" formControlName="valorClase">
+      <div class="invalid-feedback2" *ngIf="formProfesor.valorClase.invalid && (formProfesor.valorClase.dirty || formProfesor.valorClase.touched || showMessageError)">
+        <div *ngIf="formProfesor.valorClase.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Valor mensualidad (modo alumno)</label>
+      <input type="number" class="form-control" formControlName="valorMensualidad">
+      <div class="invalid-feedback2" *ngIf="formProfesor.valorMensualidad.invalid && (formProfesor.valorMensualidad.dirty || formProfesor.valorMensualidad.touched || showMessageError)">
+        <div *ngIf="formProfesor.valorMensualidad.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+
+    </form>
+    </div>
   </div>
   <div class="card-footer text-right">
     <button class="btn btn-primary mr-4" (click)="cancelForm()">Cancelar</button>
-    <button class="btn btn-primary" (click)="guardarAlumno()">Guardar</button>
+    <button class="btn btn-primary" (click)="guardarPersona()">Guardar</button>
   </div>
 
 </div>

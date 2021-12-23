@@ -1,1 +1,153 @@
-<p>clases works!</p>
+<div class="card card-success col-md-12" [hidden]="viewForm">
+  <div class="card-header">
+    <h4>CLASES REGISTRADAS</h4>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-success  alert-dismissible show fade" *ngIf="msgsSuccessStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsSuccess}}
+                      </div>
+                    </div>
+
+  <button class="btn btn-primary mb-4" (click)="createClase()">Nuevo Registro</button>
+
+  <table datatable [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Horario</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let clase of clases">
+          <td>{{ clase.nombre }}</td>
+          <td></td>
+          <td>{{ paquete.cantidadClasesEstandarSemana }}</td>
+
+          <td>
+            <label class="custom-switch mt-2">
+              <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" [checked]="clase.status" disabled>
+              <span class="custom-switch-indicator"></span>
+            </label>
+          </td>
+          <td>
+            <div class="row">
+              <a href="#" class="btn btn-icon btn-primary"><i class="far fa-edit"></i></a>
+              <a href="#" class="btn btn-icon btn-danger ml-1"><i class="fas fa-times"></i></a>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+</div>
+
+
+
+<div class="card card-success col-md-12" [hidden]="!viewForm">
+  <div class="card-header">
+    <h4>REGISTRO CLASE</h4>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-danger  alert-dismissible show fade" *ngIf="msgsErrorStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsError}}
+                      </div>
+                    </div>
+  <div class="section-title">Datos Clase</div>
+  <form [formGroup]="datosClaseForm">
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre">
+      <div class="invalid-feedback2" *ngIf="formDatos.nombre.invalid && (formDatos.nombre.dirty || formDatos.nombre.touched || showMessageError)">
+        <div *ngIf="formDatos.nombre.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#modalRegistroHorarioClase"><i class="far fa-calendar-plus"></i> Agregar horario</button>
+
+    </div>
+    <div class="form-group" *ngIf="listHorarioClaseTemp?.length > 0">
+      <label>Horario</label>
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead>
+            <th>Dia</th>
+            <th>Hora</th>
+            <th>Eliminar</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let horarioClase of listHorarioClaseTemp ">
+              <td>{{ horarioClase.dia }}</td>
+              <td>{{ horarioClase.horaInicio }} - {{ horarioClase.horaFin }}</td>
+              <td><button class="btn btn-icon btn-sm btn-danger" (click)="deleteHorarioTemp(horarioClase)"><i class="fas fa-times"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="custom-switch mt-2">
+        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="status">
+        <span class="custom-switch-indicator"></span>
+        <span class="custom-switch-description">Status</span>
+      </label>
+    </div>
+
+
+    </form>
+
+  <div class="card-footer text-right">
+    <button class="btn btn-primary mr-4" (click)="cancelForm()">Cancelar</button>
+    <button class="btn btn-primary" (click)="guardarClase()">Guardar</button>
+  </div>
+
+</div>
+
+
+
+ <div class="modal fade" tabindex="-1" role="dialog" id="modalRegistroHorarioClase" #modalRegistroHorarioClase data-backdrop="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar horario clase </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="datosHorarioClaseForm">
+          <div class="form-group">
+            <label>Dia</label>
+            <select class="form-control select2" formControlName="dia" >
+              <option *ngFor="let dia of diasSemana" [value]="dia.day">{{dia.day}}</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label>Hora Inicio</label>
+            <input type="time" class="form-control" formControlName="horaInicio" min="06:00" max="23:00">
+          </div>
+          <div class="form-group">
+            <label>Hora Fin</label>
+            <input type="time" class="form-control" formControlName="horaFin" min="06:00" max="23:00">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" #closeModalHorariobutton id="closeModalHorariobutton" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="addHorario()">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>

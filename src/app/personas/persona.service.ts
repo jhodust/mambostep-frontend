@@ -12,6 +12,8 @@ export class PersonaService {
   private url2="http://localhost:8080/personas/guardar";
   private url3="http://localhost:8080/personas/search";
   private url4="http://localhost:8080/personas/update";
+  private url5="http://localhost:8080/personas/profesor/save";
+  private url6="http://localhost:8080/personas/alumno/save";
 
   private httpHeaders = new HttpHeaders({'Content-Type':'aplication/json'});
 
@@ -27,6 +29,14 @@ export class PersonaService {
 
   savePersona(dto:any):Observable<Persona>{
     return this._http.post<Persona>(this.url2,dto);
+  }
+
+  saveProfesor(dto:any):Observable<Persona>{
+    return this._http.post<Persona>(this.url5,dto);
+  }
+
+  saveAlumno(dto:any):Observable<Persona>{
+    return this._http.post<Persona>(this.url6,dto);
   }
 
   searchDatosAlumno(documento:string):Observable<any>{
