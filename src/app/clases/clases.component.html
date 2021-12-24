@@ -68,8 +68,8 @@
     <div class="form-group">
       <label>Nombre</label>
       <input type="text" class="form-control" formControlName="nombre">
-      <div class="invalid-feedback2" *ngIf="formDatos.nombre.invalid && (formDatos.nombre.dirty || formDatos.nombre.touched || showMessageError)">
-        <div *ngIf="formDatos.nombre.errors.required">{{messageError}}</div>
+      <div class="invalid-feedback2" *ngIf="formClase.nombre.invalid && (formClase.nombre.dirty || formClase.nombre.touched || showMessageError)">
+        <div *ngIf="formClase.nombre.errors.required">{{messageError}}</div>
       </div>
     </div>
     <div class="form-group">
@@ -95,12 +95,12 @@
         </table>
       </div>
     </div>
-
     <div class="form-group">
-      <label class="custom-switch mt-2">
-        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="status">
+      <div class="control-label">Status</div>
+      <label class="switch mt-2">
+        <input type="checkbox" name="switch-checkbox" class="custom-switch-input" formControlName="status">
         <span class="custom-switch-indicator"></span>
-        <span class="custom-switch-description">Status</span>
+        <span class="custom-switch-description"></span>
       </label>
     </div>
 
@@ -132,20 +132,36 @@
             <select class="form-control select2" formControlName="dia" >
               <option *ngFor="let dia of diasSemana" [value]="dia.day">{{dia.day}}</option>
             </select>
-
+            <div class="invalid-feedback2" *ngIf="formHorarioClase.dia.invalid && (formHorarioClase.dia.dirty || formHorarioClase.dia.touched || showMessageError)">
+              <div *ngIf="formHorarioClase.dia.errors.required">{{messageError}}</div>
+            </div>
           </div>
           <div class="form-group">
             <label>Hora Inicio</label>
-            <input type="time" class="form-control" formControlName="horaInicio" min="06:00" max="23:00">
+            <input type="time" class="form-control" formControlName="horaInicio">
+            <div class="invalid-feedback2" *ngIf="formHorarioClase.horaInicio.invalid && (formHorarioClase.horaInicio.dirty || formHorarioClase.horaInicio.touched || showMessageError)">
+              <div *ngIf="formHorarioClase.horaInicio.errors.required">{{messageError}}</div>
+            </div>
           </div>
           <div class="form-group">
             <label>Hora Fin</label>
-            <input type="time" class="form-control" formControlName="horaFin" min="06:00" max="23:00">
+            <input type="time" class="form-control" formControlName="horaFin">
+            <div class="invalid-feedback2" *ngIf="formHorarioClase.horaFin.invalid && (formHorarioClase.horaFin.dirty || formHorarioClase.horaFin.touched || showMessageError)">
+              <div *ngIf="formHorarioClase.horaFin.errors.required">{{messageError}}</div>
+            </div>
           </div>
         </form>
+        <div class="alert alert-danger alert-dismissible show fade" *ngIf="msgErrorResponseFormHorarioClase != null">
+          <div class="alert-body">
+            <button class="close" data-dismiss="alert">
+              <span>&times;</span>
+            </button>
+            {{ msgErrorResponseFormHorarioClase }}
+          </div>
+        </div>
       </div>
       <div class="modal-footer bg-whitesmoke br">
-        <button type="button" class="btn btn-secondary" #closeModalHorariobutton id="closeModalHorariobutton" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" #closeModalHorariobutton id="closeModalHorariobutton" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="addHorario()">Agregar</button>
       </div>
     </div>

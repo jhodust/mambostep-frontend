@@ -7,4 +7,7 @@ export class HorarioClase {
     idClase:number;
     clase:string;
 
+    validateHoraFinDespuesHoraInicio(){
+      return this.horaFin>this.horaInicio;
+    }
 }

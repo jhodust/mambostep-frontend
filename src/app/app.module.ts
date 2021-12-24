@@ -1,3 +1,4 @@
+import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { PersonasComponent } from './personas/personas.component';
@@ -44,6 +45,12 @@ import { MainComponent } from './main/main.component';
     HttpClientModule,
     DataTablesModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      closeButton: true,
+    }),
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
               { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
