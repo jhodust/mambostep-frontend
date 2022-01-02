@@ -1,3 +1,7 @@
+import { ProfesorService } from './../profesores/profesor.service';
+import { SedeService } from './../sedes/sede.service';
+import { Sede } from './../sedes/sede';
+import { Profesor } from '../profesores/profesor';
 import { HorarioClaseService } from './../horario-clase/horario-clase.service';
 import { HorarioClase } from './../horario-clase/horario-clase';
 import { Subject } from 'rxjs';
@@ -20,15 +24,20 @@ export class ClasesComponent implements OnInit {
   constructor(private _formBuilder: FormBuilder,
     private _claseService: ClaseService,
     private _toastr: ToastrService,
-    private _horarioClaseService: HorarioClaseService) { }
+    private _horarioClaseService: HorarioClaseService,
+    private _profesorService: ProfesorService,
+    private _sedeService: SedeService) { }
 
 
 
   showMessageError: boolean = false;
   messageError: string = "Este campo es obligatorio";
   datosClaseForm = this._formBuilder.group({
+    id: [''],
     nombre: ['', Validators.required],
-    status: [false, Validators.required],
+    sede: ['', Validators.required],
+    profesor: ['', Validators.required],
+    status: [true, Validators.required],
   });
 
   datosHorarioClaseForm = this._formBuilder.group({
@@ -40,23 +49,33 @@ export class ClasesComponent implements OnInit {
   clases: Clase[] = [];
 
   viewForm:boolean=false;
-  dtTrigger: Subject<any> = new Subject<any>();
+  dtTrigger: Subject<any>;
   msgsSuccessStatus:boolean=false;
   msgsSuccess:string;
   msgsErrorStatus:boolean=false;
   msgsError:string;
   listHorarioClaseTemp: HorarioClase[];
+  msgErrorResponseFormClase:string;
   msgErrorResponseFormHorarioClase:string;
-
+  listProfesores: Profesor[] = [];
+  listSedes: Sede[] = [];
+  showMsgErrorResponseFormHorarioClase: boolean;
   ngOnInit(): void {
+    this.dtTrigger=new Subject<any>();
+    this.listarClases();
     this.initDiasSemana();
+    this.listarSedes();
+    this.listarProfesores();
     this.listHorarioClaseTemp=[];
+    this.showMsgErrorResponseFormHorarioClase=false;
+
   }
 
   get formClase() { return this.datosClaseForm.controls; }
   get formHorarioClase() { return this.datosHorarioClaseForm.controls; }
 
   initDiasSemana(){
+
     this.diasSemana=[
       {
         "day": "Lunes",
@@ -82,51 +101,89 @@ export class ClasesComponent implements OnInit {
     ]
   }
 
-  createClase(){
+  listarProfesores(){
+    this.listProfesores=[];
+    this._profesorService.getProfesores().subscribe(json => {
+      this.listProfesores=json.data;
+    });
+  }
+
+  listarSedes(){
+    this.listSedes=[];
+    this._sedeService.getSedes().subscribe(json => {
+      this.listSedes=json.data;
+    });
+  }
+
+
+  loadFormClase(){
+
+    this.dtTrigger.unsubscribe();
     this.viewForm=true;
   }
 
   openModal() {
-    console.log("open")
     this.modalRegistroHorarioClase.nativeElement.className = 'modal show';
   }
 
   listarClases(){
     this.clases=[];
-    this._claseService.getClases().subscribe(json => {
+    this._claseService.getAllClases().subscribe(json => {
       this.clases=json;
-      console.log(this.clases);
       this.dtTrigger.next();
     });
   }
-  cancelForm(){
-    this.dtTrigger.unsubscribe();
+  cancelFormClase(){
     this.viewForm=false;
-    this.listarClases();
+    this.datosClaseForm.reset();
   }
 
   guardarClase(){
-    this.showMessageError = true;
-    if (this.datosClaseForm.invalid || this.datosClaseForm.invalid) {
-      console.log(this.datosClaseForm);
-      console.log("campos invalidos");
-      return;
+
+
+    if(this.validateFormClase() && this.validateHorarioAgregado()){
+      let clase=this.buildClase();
+      this.sendRequestSaveClase(clase);
     }
-    /*let dto={
-      nombre: this.datosPaqueteForm.get('nombre').value,
-      precio: this.datosPaqueteForm.get('precio').value,
-      cantidadClasesEstandarSemana: this.datosPaqueteForm.get('cantidadClasesEstandarPorSemana').value,
-      hasClasesCrewLatina: this.datosPaqueteForm.get('hasClasesCrewLatina').value,
-      hasClasesCrewUrbano: this.datosPaqueteForm.get('hasClasesCrewUrbana').value,
-      ventaPublico: this.datosPaqueteForm.get('isVentaPublico').value,
-      status: this.datosPaqueteForm.get('status').value
+
+  }
+
+  validateFormClase():Boolean{
+  this.showMessageError=true;
+    if (this.datosClaseForm.invalid) {
+      this.msgErrorResponseFormClase="Diligencia el formulario correctamente";
+      return false;
     }
-    console.log(dto);
-    this._paqueteService.savePaquete(dto).subscribe(response => {
+    return true;
+  }
+
+  validateHorarioAgregado():Boolean{
+    if (this.listHorarioClaseTemp.length === 0) {
+      this.msgErrorResponseFormClase="Agrega el horario de la clase";
+      return false;
+    }
+    return true;
+  }
+
+  buildClase():Clase{
+
+    let clase = new Clase();
+    clase.id=this.datosClaseForm.get('id').value;
+    clase.nombre=this.datosClaseForm.get('nombre').value;
+    clase.status=this.datosClaseForm.get('status').value;
+    clase.idSede=this.datosClaseForm.get('sede').value;
+    clase.idProfesor=this.datosClaseForm.get('profesor').value;
+    clase.listHorarioClase=this.listHorarioClaseTemp;
+    return clase;
+  }
+
+  sendRequestSaveClase(claseDto:Clase){
+    this._claseService.saveClase(claseDto).subscribe(response => {
       this.msgsSuccessStatus=true;
-      this.msgsSuccess="Registro exitoso paquete";
-      this.cancelForm();
-    });*/
+      this.msgsSuccess=response.message;
+      this.cancelFormClase();
+      this.listarClases();
+    });
   }
 
   validateCheck(condition:boolean){
@@ -160,8 +217,7 @@ export class ClasesComponent implements OnInit {
   validateHoursClass(horarioTemp:HorarioClase){
 
     this._horarioClaseService.validateAvailableHours(horarioTemp.dia,
-      horarioTemp.horaInicio,horarioTemp.horaFin ).subscribe(response => {
-      console.log(response);
+      horarioTemp.horaInicio,horarioTemp.horaFin, this.datosClaseForm.get('sede').value ).subscribe(response => {
       if(response.data){
         this.listHorarioClaseTemp.push(horarioTemp);
         this.closeModalHorarioAndResetForm();
@@ -177,6 +233,7 @@ export class ClasesComponent implements OnInit {
 
   closeModalHorarioAndResetForm(){
     this.datosHorarioClaseForm.reset();
+    this.showMsgErrorResponseFormHorarioClase = false;
     //this.closeModalHorarioClasebutton.nativeElement.click();
   }
 
@@ -189,5 +246,24 @@ export class ClasesComponent implements OnInit {
           this._toastr.success('Se ha eliminado el horario exitosamente!', 'Excelente');
          }
   });
+  }
+  onChangeSede(){
+    this.listHorarioClaseTemp=[];
+  }
+
+  editClase(idClase: number){
+    this._claseService.editClase(idClase).subscribe(response => {
+      this.loadCurrentClase(response.data);
+      this.loadFormClase();
+    });
+  }
+
+  loadCurrentClase(clase: Clase){
+    this.datosClaseForm.get('id').setValue(clase.id);
+    this.datosClaseForm.get('nombre').setValue(clase.nombre);
+    this.datosClaseForm.get('sede').setValue(clase.idSede);
+    this.datosClaseForm.get('profesor').setValue(clase.idProfesor);
+    this.datosClaseForm.get('status').setValue(clase.status);
+    this.listHorarioClaseTemp=clase.listHorarioClase;
   }
 }

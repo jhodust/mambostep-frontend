@@ -17,8 +17,8 @@ export class HorarioClaseService {
     return this._http.get<HorarioClase[]>(this.url1+"/"+identificacion);
   }
 
-  validateAvailableHours(dia: string, horaInicio: any, horaFin:any):Observable<any>{
-    const options = { params: new HttpParams().set("dia",dia).set("horaInicio", horaInicio).set("horaFin", horaFin) } ;
+  validateAvailableHours(dia: string, horaInicio: any, horaFin:any, idSede:any):Observable<any>{
+    const options = { params: new HttpParams().set("dia",dia).set("horaInicio", horaInicio).set("horaFin", horaFin).set("idSede", idSede) } ;
     return this._http.get<HorarioClase[]>(this.url2, options);
   }
 }

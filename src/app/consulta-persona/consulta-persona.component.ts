@@ -69,9 +69,8 @@ export class ConsultaPersonaComponent implements OnInit {
   searchDatosAlumno(){
     this.msgsErrorStatus=false;
     this._personaService.searchDatosAlumno(this.documentoSearch).subscribe((response) =>{
-      this.datosBasicosAlumno=response;
+      this.datosBasicosAlumno=response.data;
       this.loadOldDataForm();
-      console.log(response);
       if(response==null){
           this.msgsError="No existe alumno con ese documento ingresado en la base de datos";
           this.msgsErrorStatus=true;
@@ -82,7 +81,6 @@ export class ConsultaPersonaComponent implements OnInit {
   }
 
   loadOldDataForm(){
-    console.log(this.datosBasicosAlumno);
     if(this.datosBasicosAlumno){
       this.datosPersonalesForm.setValue({
         'id':this.datosBasicosAlumno,
@@ -103,7 +101,6 @@ export class ConsultaPersonaComponent implements OnInit {
     this._mensualidadService.searchLastMensualidad(this.documentoSearch).subscribe((response) =>{
       this.initializedDataTable();
       this.dataAlumno = (response as any);
-      console.log(this.dataAlumno);
 
     });
 

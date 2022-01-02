@@ -20,6 +20,9 @@ import { ClasesComponent } from './clases/clases.component';
 import { HorarioClaseComponent } from './horario-clase/horario-clase.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
+import { SedesComponent } from './sedes/sedes.component';
+import { ProfesoresComponent } from './profesores/profesores.component';
+import { AlumnosComponent } from './alumnos/alumnos.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { MainComponent } from './main/main.component';
     LoginComponent,
     MainComponent,
     PaqueteComponent,
-    ClasesComponent
+    ClasesComponent,
+    SedesComponent,
+    ProfesoresComponent,
+    AlumnosComponent
   ],
   imports: [
     BrowserModule,

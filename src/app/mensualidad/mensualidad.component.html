@@ -24,46 +24,74 @@
                       </div>
                     </div>
     <form [formGroup]="mensualidadForm">
-    <div class="form-group">
-      <label>Identificación</label>
-      <input type="text" class="form-control" formControlName="identificacion" (focusout)="searchAlumnoByIdentificacion()">
-    </div>
-    <div class="form-group">
-      <label>Paquete</label>
-      <select class="form-control select2" formControlName="idPaquete" (change)="loadPaquetePrecio()">
-        <option *ngFor="let paq of paquetes" [value]="paq.id">{{paq.nombre}}</option>
-      </select>
-
-    </div>
-    <div class="form-group">
-      <label>Fecha Inicio</label>
-      <input type="date" class="form-control" formControlName="fechaInicio">
-    </div>
-    <div class="form-group">
-      <label>Fecha Fin</label>
-      <input type="date" class="form-control" formControlName="fechaFin">
-    </div>
-    <div class="form-group">
-      <label>Valor a Pagar</label>
-      <input type="text" class="form-control" formControlName="precioPactado">
-    </div>
-    <div class="form-group">
-      <label>Observaciones</label>
-      <input type="text" class="form-control" formControlName="observaciones">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Clases</label>
-      <div class="selectgroup selectgroup-pills">
-        <label class="selectgroup-item" *ngFor="let clase of listClases">
-          <input type="checkbox" name="value" value="HTML" class="selectgroup-input" (change)="loadClase(clase.id, $event.target.checked)">
-          <span class="selectgroup-button">{{ clase.nombre }}</span>
-        </label>
+      <div class="form-group">
+        <label>Identificación</label>
+        <input type="text" class="form-control" formControlName="identificacion" (focusout)="searchAlumnoByIdentificacion()">
+        <span class="badge badge-light" *ngIf="showMessageInfoPersona">{{infoPersona}}</span>
       </div>
-    </div>
+      <div [hidden]="hiddenFormMensualidad">
+        <div class="form-group">
+          <label>Paquete</label>
+          <select class="form-control" formControlName="idPaquete" (change)="changePaquete()" id="selecPaqueteMensualidad">
+            <option *ngFor="let paq of paquetes" [value]="paq.id" [attr.data-tiempo]="paq.diasDuracion">{{paq.nombre}}</option>
+          </select>
+          <div class="invalid-feedback2" *ngIf="formDatosMensualidad.idPaquete.invalid && (formDatosMensualidad.idPaquete.dirty || formDatosMensualidad.idPaquete.touched || showMessageError)">
+            <div *ngIf="formDatosMensualidad.idPaquete.errors.required">{{messageError}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Fecha Inicio</label>
+          <input type="date" class="form-control" formControlName="fechaInicio" id="fechaInicioMensualidad" (change)="getFechaFinMensualidad()">
+          <div class="invalid-feedback2" *ngIf="formDatosMensualidad.fechaInicio.invalid && (formDatosMensualidad.fechaInicio.dirty || formDatosMensualidad.fechaInicio.touched || showMessageError)">
+            <div *ngIf="formDatosMensualidad.fechaInicio.errors.required">{{messageError}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Fecha Fin</label>
+          <input type="date" class="form-control" formControlName="fechaFin" id="fechaFinMensualidad" readOnly>
+          <div class="invalid-feedback2" *ngIf="formDatosMensualidad.fechaFin.invalid && (formDatosMensualidad.fechaFin.dirty || formDatosMensualidad.fechaFin.touched || showMessageError)">
+            <div *ngIf="formDatosMensualidad.fechaFin.errors.required">{{messageError}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Valor a Pagar</label>
+          <input type="text" class="form-control" formControlName="precioPactado">
+          <div class="invalid-feedback2" *ngIf="formDatosMensualidad.precioPactado.invalid && (formDatosMensualidad.precioPactado.dirty || formDatosMensualidad.precioPactado.touched || showMessageError)">
+            <div *ngIf="formDatosMensualidad.precioPactado.errors.required">{{messageError}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Observaciones</label>
+          <input type="text" class="form-control" formControlName="observaciones">
+        </div>
+
+        <div [hidden]="hideClases">
+          <div  class="btn btn-primary btn-icon icon-left">
+            <i class="fas fa-exclamation-circle"></i> Cantidad clases a elegir <span class="badge badge-transparent">{{totalClasesPosibles}}</span>
+          </div>
+          <div class="form-group mt-2" >
+            <label class="form-label">Clases</label>
+            <div class="selectgroup selectgroup-pills">
+              <label class="selectgroup-item" *ngFor="let clase of listClases">
+                <input type="checkbox" #checkboxClase name="value" value="HTML" class="selectgroup-input" (change)="loadClase(clase.id, $event)">
+                <span class="selectgroup-button">{{ clase.nombre }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-danger alert-dismissible show fade" *ngIf="showMessageErrorResponse">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+          {{ msgErrorResponseForm }}
+        </div>
+      </div>
     </form>
   </div>
   <div class="card-footer text-right">
-    <button class="btn btn-primary mr-4" (click)="cancelForm()">Cancelar</button>
+    <button class="btn btn-primary mr-4" (click)="resetForm()">Cancelar</button>
     <button class="btn btn-primary" (click)="guardarMensualidad()">Guardar</button>
   </div>
 
@@ -71,26 +99,3 @@
 
 
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" appendTo="body">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>

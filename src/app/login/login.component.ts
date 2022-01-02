@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
         this._authService.guardarToken(response.access_token);
         let usuario = this._authService.personaLogueada;
         console.log(usuario);
-        this._router.navigate(['/admin/personas']);
+        this._router.navigate(['/admin/alumnos']);
     },err => {
       if(err.status == 400){
         console.log("usuario o password incorrectas");

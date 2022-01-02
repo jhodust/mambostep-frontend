@@ -11,6 +11,7 @@ export class PaqueteService {
 
   private url1="http://localhost:8080/paquetes/listar";
   private url2="http://localhost:8080/paquetes/save";
+  private url3="http://localhost:8080/paquetes/find";
 
   private httpHeaders = new HttpHeaders({'Content-Type':'aplication/json'});
 
@@ -22,7 +23,13 @@ export class PaqueteService {
     return this._http.get<Paquete[]>(this.url1);
   }
 
-  savePaquete(dto:any):Observable<Paquete>{
+  savePaquete(dto:any):Observable<any>{
     return this._http.post<Paquete>(this.url2,dto);
   }
+
+  editPaquete(idPaquete:any):Observable<any>{
+    return this._http.get<Paquete>(this.url3+'/'+idPaquete);
+  }
+
+
 }

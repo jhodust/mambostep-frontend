@@ -11,5 +11,6 @@ export class Mensualidad {
   nombrePersona: String | undefined;
   idsClases: number[] | undefined;
   clases: String | undefined;
+  hasClasesIlimitadas: boolean;
 
 }

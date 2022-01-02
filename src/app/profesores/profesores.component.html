@@ -1,0 +1,161 @@
+<div class="card card-success col-md-12" [hidden]="viewForm">
+  <div class="card-header">
+    <h4>PROFESORES REGISTRADOS</h4>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-success  alert-dismissible show fade" *ngIf="msgsSuccessStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsSuccess}}
+                      </div>
+                    </div>
+
+  <button class="btn btn-primary mb-4" (click)="loadFormPersona()">Nuevo Registro</button>
+
+  <table datatable [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Identificación</th>
+        <th>Fecha Ingreso</th>
+        <th>Instagram</th>
+        <th>Telefono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let profesor of listProfesores">
+          <td>{{ profesor.nombre }}</td>
+          <td>{{ profesor.identificacion }}</td>
+          <td>{{ profesor.fechaIngreso | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ profesor.instagram }}</td>
+          <td>{{ profesor.telefono }}</td>
+          <td>
+            <button class="btn btn-icon btn-primary" (click)="editProfesor(profesor.id)"><i class="far fa-edit"></i></button>
+
+        </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+</div>
+
+<div class="card card-success col-md-12" [hidden]="!viewForm">
+  <div class="card-header">
+    <h4>REGISTRO PROFESOR</h4>
+  </div>
+  <div class="card-body">
+  <div class="alert alert-danger  alert-dismissible show fade" *ngIf="msgsErrorStatus">
+                      <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                        {{msgsError}}
+                      </div>
+                    </div>
+  <div class="section-title">Datos Personales</div>
+  <form [formGroup]="datosPersonalesForm">
+    <div class="form-group">
+      <label>Sede</label>
+      <select class="form-control" formControlName="sede">
+        <option *ngFor="let sede of listSedes" [value]="sede.id">{{sede.nombre}} - {{sede.direccion}}</option>
+      </select>
+      <div class="invalid-feedback2" *ngIf="formDatos.sede.invalid && (formDatos.sede.dirty || formDatos.sede.touched || showMessageError)">
+        <div *ngIf="formDatos.sede.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre">
+      <div class="invalid-feedback2" *ngIf="formDatos.nombre.invalid && (formDatos.nombre.dirty || formDatos.nombre.touched || showMessageError)">
+        <div *ngIf="formDatos.nombre.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Identificación</label>
+      <input type="number" class="form-control" formControlName="identificacion">
+      <div class="invalid-feedback2" *ngIf="formDatos.identificacion.invalid && (formDatos.identificacion.dirty || formDatos.identificacion.touched || showMessageError)">
+        <div *ngIf="formDatos.identificacion.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Fecha Nacimiento</label>
+      <input type="date" class="form-control" formControlName="fechaNacimiento">
+      <div class="invalid-feedback2" *ngIf="formDatos.fechaNacimiento.invalid && (formDatos.fechaNacimiento.dirty || formDatos.fechaNacimiento.touched || showMessageError)">
+        <div *ngIf="formDatos.fechaNacimiento.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Fecha Ingreso</label>
+      <input type="date" class="form-control" formControlName="fechaIngreso">
+      <div class="invalid-feedback2" *ngIf="formDatos.fechaIngreso.invalid && (formDatos.fechaIngreso.dirty || formDatos.fechaIngreso.touched || showMessageError)">
+        <div *ngIf="formDatos.fechaIngreso.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Instagram</label>
+      <input type="text" class="form-control" formControlName="instagram">
+      <div class="invalid-feedback2" *ngIf="formDatos.instagram.invalid && (formDatos.instagram.dirty || formDatos.instagram.touched || showMessageError)">
+        <div *ngIf="formDatos.instagram.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Telefono</label>
+      <input type="number" class="form-control" formControlName="telefono">
+      <div class="invalid-feedback2" *ngIf="formDatos.telefono.invalid && (formDatos.telefono.dirty || formDatos.telefono.touched || showMessageError)">
+        <div *ngIf="formDatos.telefono.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div  *ngIf="validarMenorEdad()">
+      <div class="form-group">
+        <label>Nombre Acudiente</label>
+        <input type="text" class="form-control" formControlName="nombreAcudiente">
+        <div class="invalid-feedback2" *ngIf="formDatos.nombreAcudiente.invalid && (formDatos.nombreAcudiente.dirty || formDatos.nombreAcudiente.touched || showMessageError)">
+        <div *ngIf="formDatos.nombreAcudiente.errors.required">{{messageError}}</div>
+      </div>
+      </div>
+      <div class="form-group">
+        <label>Telefono Acudiente</label>
+        <input type="number" class="form-control" formControlName="telefonoAcudiente">
+        <div class="invalid-feedback2" *ngIf="formDatos.telefonoAcudiente.invalid && (formDatos.telefonoAcudiente.dirty || formDatos.telefonoAcudiente.touched || showMessageError)">
+        <div *ngIf="formDatos.telefonoAcudiente.errors.required">{{messageError}}</div>
+      </div>
+      </div>
+      <div class="form-group">
+        <label>Parentesco Acudiente</label>
+        <input type="text" class="form-control" formControlName="parentescoAcudiente">
+        <div class="invalid-feedback2" *ngIf="formDatos.parentescoAcudiente.invalid && (formDatos.parentescoAcudiente.dirty || formDatos.parentescoAcudiente.touched || showMessageError)">
+        <div *ngIf="formDatos.parentescoAcudiente.errors.required">{{messageError}}</div>
+      </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Valor clase</label>
+      <input type="number" class="form-control" formControlName="valorClase">
+      <div class="invalid-feedback2" *ngIf="formDatos.valorClase.invalid && (formDatos.valorClase.dirty || formDatos.valorClase.touched || showMessageError)">
+        <div *ngIf="formDatos.valorClase.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Valor mensualidad (modo alumno)</label>
+      <input type="number" class="form-control" formControlName="valorMensualidad">
+      <div class="invalid-feedback2" *ngIf="formDatos.valorMensualidad.invalid && (formDatos.valorMensualidad.dirty || formDatos.valorMensualidad.touched || showMessageError)">
+        <div *ngIf="formDatos.valorMensualidad.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+
+    </form>
+
+
+  <div class="card-footer text-right">
+    <button class="btn btn-primary mr-4" (click)="cancelForm()">Cancelar</button>
+    <button class="btn btn-primary" (click)="guardarProfesor()">Guardar</button>
+  </div>
+
+</div>
+
+
+

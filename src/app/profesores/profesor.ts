@@ -1,4 +1,4 @@
-export class Persona {
+export class Profesor {
    id: number = 0;
 	 nombre: String | undefined;
    identificacion: String | undefined;
@@ -18,6 +18,6 @@ export class Persona {
    profesor: boolean;
    alumno: boolean;
    tipoPersona: string;
-
-
+   valorClase: number;
+   pagoClasesMes: number;
 }

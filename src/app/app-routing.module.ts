@@ -1,3 +1,5 @@
+import { AlumnosComponent } from './alumnos/alumnos.component';
+import { ProfesoresComponent } from './profesores/profesores.component';
 import { ClasesComponent } from './clases/clases.component';
 
 import { PaqueteComponent } from './paquete/paquete.component';
@@ -15,7 +17,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: MainComponent,
     children: [
-      { path: 'personas', component: PersonasComponent,canActivate:[AuthGuard] },
+      { path: 'profesores', component: ProfesoresComponent,canActivate:[AuthGuard] },
+      { path: 'alumnos', component: AlumnosComponent,canActivate:[AuthGuard] },
       { path: 'consulta-alumno', component: ConsultaPersonaComponent,canActivate:[AuthGuard] },
       { path: 'mensualidad', component: MensualidadComponent,canActivate:[AuthGuard] },
       { path: 'paquetes', component: PaqueteComponent,canActivate:[AuthGuard] },

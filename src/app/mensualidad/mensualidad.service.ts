@@ -12,6 +12,7 @@ export class MensualidadService {
 
   private url1="http://localhost:8080/mensualidad/searchLast";
   private url2="http://localhost:8080/mensualidad/registrar";
+  private url3="http://localhost:8080/mensualidad/dateFechaFinMensualidad";
   constructor(private _http: HttpClient) { }
 
 
@@ -26,6 +27,10 @@ export class MensualidadService {
 
   saveMensualidad(dto:any):Observable<any>{
     return this._http.post<Mensualidad>(this.url2,dto);
+  }
+
+  getFechaFinMensualidad(fechaInicioMensualidad: string, diasHabilesMensualidad: string){
+    return this._http.get<any>(this.url3+'/'+fechaInicioMensualidad+'/'+diasHabilesMensualidad);
   }
 
 

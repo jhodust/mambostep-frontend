@@ -14,19 +14,25 @@ export class PaqueteComponent implements OnInit {
     private _paqueteService: PaqueteService) { }
 
   ngOnInit(): void {
+
+    this.dtTrigger=new Subject<any>();
+    this.hiddenInputCantidadHorasSemanales=false;
     this.listarPaquetes();
   }
 
   showMessageError: boolean = false;
   messageError: string = "Este campo es obligatorio";
   datosPaqueteForm = this._formBuilder.group({
+    id: [''],
     nombre: ['', Validators.required],
     precio: ['', Validators.required],
-    cantidadClasesEstandarPorSemana: ['', Validators.required],
+    diasDuracion: ['', Validators.required],
+    cantidadClasesEstandarPorSemana: [''],
     hasClasesCrewLatina: [false, Validators.required],
     hasClasesCrewUrbana: [false, Validators.required],
+    hasClasesIlimitadas: [false, Validators.required],
     isVentaPublico: [false, Validators.required],
-    status: [false, Validators.required],
+    status: [true, Validators.required],
   });
 
   paquetes: Paquete[] = [];
@@ -38,9 +44,12 @@ export class PaqueteComponent implements OnInit {
   msgsErrorStatus:boolean=false;
   msgsError:string;
 
+  hiddenInputCantidadHorasSemanales:boolean;
+
   get formDatos() { return this.datosPaqueteForm.controls; }
 
-  createPaquete(){
+  loadFormPaquete(){
+    this.dtTrigger.unsubscribe();
     this.viewForm=true;
   }
 
@@ -48,41 +57,85 @@ export class PaqueteComponent implements OnInit {
     this.paquetes=[];
     this._paqueteService.getPaquetes().subscribe(json => {
       this.paquetes=json;
-      console.log(this.paquetes);
       this.dtTrigger.next();
     });
   }
-  cancelForm(){
-    this.dtTrigger.unsubscribe();
+  closeForm(){
     this.viewForm=false;
     this.listarPaquetes();
   }
 
+  validateFormPaquete():Boolean{
+    this.showMessageError=false;
+    if (this.datosPaqueteForm.invalid) {
+      this.showMessageError=true;
+      this.msgsError="Diligencia el formulario correctamente";
+      return false;
+    }
+    return true;
+  }
+
   guardarPaquete(){
-    this.showMessageError = true;
-    if (this.datosPaqueteForm.invalid || this.datosPaqueteForm.invalid) {
-      console.log(this.datosPaqueteForm);
-      console.log("campos invalidos");
-      return;
+    if(this.validateFormPaquete()){
+      let paquete= this.buildPaquete();
+      this.sendRequestSavePaquete(paquete);
     }
-    let dto={
-      nombre: this.datosPaqueteForm.get('nombre').value,
-      precio: this.datosPaqueteForm.get('precio').value,
-      cantidadClasesEstandarSemana: this.datosPaqueteForm.get('cantidadClasesEstandarPorSemana').value,
-      hasClasesCrewLatina: this.datosPaqueteForm.get('hasClasesCrewLatina').value,
-      hasClasesCrewUrbano: this.datosPaqueteForm.get('hasClasesCrewUrbana').value,
-      ventaPublico: this.datosPaqueteForm.get('isVentaPublico').value,
-      status: this.datosPaqueteForm.get('status').value
-    }
-    console.log(dto);
-    this._paqueteService.savePaquete(dto).subscribe(response => {
+
+  }
+
+  buildPaquete(){
+    let paquete= new Paquete();
+    paquete.id=this.datosPaqueteForm.get('id').value;
+    paquete.nombre= this.datosPaqueteForm.get('nombre').value;
+    paquete.precio= this.datosPaqueteForm.get('precio').value;
+    paquete.diasDuracion= this.datosPaqueteForm.get('diasDuracion').value;
+    paquete.cantidadClasesEstandarSemana= this.datosPaqueteForm.get('cantidadClasesEstandarPorSemana').value;
+    paquete.hasClasesCrewLatina= this.datosPaqueteForm.get('hasClasesCrewLatina').value;
+    paquete.hasClasesCrewUrbano= this.datosPaqueteForm.get('hasClasesCrewUrbana').value;
+    paquete.ventaPublico= this.datosPaqueteForm.get('isVentaPublico').value;
+    paquete.hasClasesIlimitadas= this.datosPaqueteForm.get('hasClasesIlimitadas').value;
+    paquete.status= this.datosPaqueteForm.get('status').value;
+    return paquete;
+  }
+
+  sendRequestSavePaquete(paquete:Paquete){
+    this._paqueteService.savePaquete(paquete).subscribe(response => {
       this.msgsSuccessStatus=true;
-      this.msgsSuccess="Registro exitoso paquete";
-      this.cancelForm();
+      this.msgsSuccess=response.body.message;
+      this.closeForm();
     });
   }
 
   validateCheck(condition:boolean){
     return condition ? "SI":"NO";
+  }
+
+  changeCheckClasesIlimitadas(event){
+    if(event.target.checked){
+      this.hiddenInputCantidadHorasSemanales=true;
+      this.datosPaqueteForm.get('cantidadClasesEstandarPorSemana').setValue(null);
+    }else{
+      this.hiddenInputCantidadHorasSemanales=false;
+    }
+  }
+
+  editPaquete(idPaquete: number){
+    this._paqueteService.editPaquete(idPaquete).subscribe(response => {
+      this.loadCurrentPaquete(response.data);
+      this.loadFormPaquete();
+    });
+  }
+
+  loadCurrentPaquete(paquete: Paquete){
+    this.datosPaqueteForm.get('id').setValue(paquete.id);
+    this.datosPaqueteForm.get('nombre').setValue(paquete.nombre);
+    this.datosPaqueteForm.get('precio').setValue(paquete.precio);
+    this.datosPaqueteForm.get('diasDuracion').setValue(paquete.diasDuracion);
+    this.datosPaqueteForm.get('cantidadClasesEstandarPorSemana').setValue(paquete.cantidadClasesEstandarSemana);
+    this.datosPaqueteForm.get('hasClasesCrewLatina').setValue(paquete.hasClasesCrewLatina);
+    this.datosPaqueteForm.get('hasClasesCrewUrbana').setValue(paquete.hasClasesCrewUrbano);
+    this.datosPaqueteForm.get('isVentaPublico').setValue(paquete.ventaPublico);
+    this.datosPaqueteForm.get('hasClasesIlimitadas').setValue(paquete.hasClasesIlimitadas);
+    this.datosPaqueteForm.get('status').setValue(paquete.status);
   }
 }

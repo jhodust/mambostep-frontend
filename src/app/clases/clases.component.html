@@ -12,13 +12,14 @@
                       </div>
                     </div>
 
-  <button class="btn btn-primary mb-4" (click)="createClase()">Nuevo Registro</button>
+  <button class="btn btn-primary mb-4" (click)="loadFormClase()">Nuevo Registro</button>
 
   <table datatable [dtTrigger]="dtTrigger" class="row-border hover">
     <thead>
       <tr>
         <th>Nombre</th>
         <th>Horario</th>
+        <th>Profesor</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
@@ -26,9 +27,15 @@
     <tbody>
       <tr *ngFor="let clase of clases">
           <td>{{ clase.nombre }}</td>
-          <td></td>
-          <td>{{ paquete.cantidadClasesEstandarSemana }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let horario of clase.listHorarioClase ">
+                {{ horario.dia }} {{ horario.horaInicio}} - {{ horario.horaFin}}
+              </li>
 
+            </ul>
+          </td>
+          <td>{{ clase.nombreProfesor}}</td>
           <td>
             <label class="custom-switch mt-2">
               <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" [checked]="clase.status" disabled>
@@ -36,10 +43,8 @@
             </label>
           </td>
           <td>
-            <div class="row">
-              <a href="#" class="btn btn-icon btn-primary"><i class="far fa-edit"></i></a>
-              <a href="#" class="btn btn-icon btn-danger ml-1"><i class="fas fa-times"></i></a>
-            </div>
+            <button class="btn btn-icon btn-primary" (click)="editClase(clase.id)"><i class="far fa-edit"></i></button>
+
           </td>
         </tr>
     </tbody>
@@ -66,10 +71,28 @@
   <div class="section-title">Datos Clase</div>
   <form [formGroup]="datosClaseForm">
     <div class="form-group">
+      <label>Sede</label>
+      <select class="form-control" formControlName="sede" (change)="onChangeSede()">
+        <option *ngFor="let sede of listSedes" [value]="sede.id">{{sede.nombre}} - {{sede.direccion}}</option>
+      </select>
+      <div class="invalid-feedback2" *ngIf="formClase.sede.invalid && (formClase.sede.dirty || formClase.sede.touched || showMessageError)">
+        <div *ngIf="formClase.sede.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
       <label>Nombre</label>
       <input type="text" class="form-control" formControlName="nombre">
       <div class="invalid-feedback2" *ngIf="formClase.nombre.invalid && (formClase.nombre.dirty || formClase.nombre.touched || showMessageError)">
         <div *ngIf="formClase.nombre.errors.required">{{messageError}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Profesor</label>
+      <select class="form-control" formControlName="profesor" >
+        <option *ngFor="let profesor of listProfesores" [value]="profesor.id">{{profesor.nombre}}</option>
+      </select>
+      <div class="invalid-feedback2" *ngIf="formClase.profesor.invalid && (formClase.profesor.dirty || formClase.profesor.touched || showMessageError)">
+        <div *ngIf="formClase.profesor.errors.required">{{messageError}}</div>
       </div>
     </div>
     <div class="form-group">
@@ -103,12 +126,19 @@
         <span class="custom-switch-description"></span>
       </label>
     </div>
-
+    <div class="alert alert-danger alert-dismissible show fade" *ngIf="showMsgErrorResponseFormHorarioClase">
+      <div class="alert-body">
+        <button class="close" data-dismiss="alert">
+          <span>&times;</span>
+        </button>
+        {{ msgErrorResponseFormClase }}
+      </div>
+    </div>
 
     </form>
 
   <div class="card-footer text-right">
-    <button class="btn btn-primary mr-4" (click)="cancelForm()">Cancelar</button>
+    <button class="btn btn-primary mr-4" (click)="cancelFormClase()">Cancelar</button>
     <button class="btn btn-primary" (click)="guardarClase()">Guardar</button>
   </div>
 
@@ -129,7 +159,7 @@
         <form [formGroup]="datosHorarioClaseForm">
           <div class="form-group">
             <label>Dia</label>
-            <select class="form-control select2" formControlName="dia" >
+            <select class="form-control" formControlName="dia" >
               <option *ngFor="let dia of diasSemana" [value]="dia.day">{{dia.day}}</option>
             </select>
             <div class="invalid-feedback2" *ngIf="formHorarioClase.dia.invalid && (formHorarioClase.dia.dirty || formHorarioClase.dia.touched || showMessageError)">
